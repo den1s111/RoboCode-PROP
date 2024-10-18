@@ -176,7 +176,7 @@ public class TimidinRobot extends AdvancedRobot{
             turnRight(-45); //Turn left 45 degrees
         } else if (getX() < margin) {
             //Turn slightly right to avoid the left wall and move backward/forward
-            turnRight(45); //Turn right 45 degrees 
+            turnRight(45); //Turn right 45 degrees
         } else if (getY() > battlefieldHeight - margin) {
             //Turn slightly left if too close to the top wall
             turnRight(-45);
