@@ -1,5 +1,4 @@
 /**
- *
  * @author Denis Vera Iriyari
  */
 package FollowTheTeamLeader;
@@ -34,6 +33,13 @@ public class FollowTheLeaderBot extends TeamRobot implements Serializable{
     private static final int ROLE_CHANGE_INTERVAL = 450; //15 seconds in ticks (30 ticks/second)
     private int deadAllies = 0; //Saves the number of ally robots that have died during battle
     
+    /**
+     * Handles the main rules of the robot changing between states
+     * when needed according to the exercise requirements going through
+     * the hierarchy establishing fase to getting to the closest corner
+     * all the way through the 'CONGA' fase in which everything is handled
+     * by the 'run' functions
+     */
     @Override
     public void run() 
     {
@@ -133,16 +139,18 @@ public class FollowTheLeaderBot extends TeamRobot implements Serializable{
         //Move to the closest corner
         goTo(targetX, targetY);
     }
-    
-    
 
-    //Handles the leader's behavior
+    /**
+     * Handles the leader's behavior
+     */
     public void runTeamLeader() 
     {
         moveInRectangle();  
     }
-    
-    //Handles the follower's behavior
+
+    /**
+     * Handles the follower's behavior
+     */
     public void runFollower() 
     {
         //If a target is set, shoot at it
@@ -274,9 +282,12 @@ public class FollowTheLeaderBot extends TeamRobot implements Serializable{
     {
         turnRadarRight(360); //
     }
-    
-    //Handles what to do in case a robot is scanned
-    //Only the leader will scan robot's and set a target
+
+    /**
+     * Handles what to do in case a robot is scanned
+     * Only the leader will scan robot's and set a target
+     * @param event
+     */
     @Override
     public void onScannedRobot(ScannedRobotEvent event)
     {   
@@ -308,10 +319,13 @@ public class FollowTheLeaderBot extends TeamRobot implements Serializable{
             }
         }
     }
-      
-    //When hit by a robot, we aim at him and shoot (id it is not ally), after that, we redesign the pathing
-    //to the furthest corner by moving back and around the enemy (only the leader does this)
-    //Copied from my 'TimidinRobot' class (Slightly modified)
+
+    /**
+     * When hit by a robot, we aim at him and shoot (id it is not ally), after that, we redesign the pathing
+     * to the furthest corner by moving back and around the enemy (only the leader does this)
+     * Copied from my 'TimidinRobot' class (Slightly modified)
+     * @param event
+     */
     @Override
     public void onHitRobot(HitRobotEvent event)
     {
@@ -330,10 +344,13 @@ public class FollowTheLeaderBot extends TeamRobot implements Serializable{
             moveAroundEnemy(-100);            
         }
     }
-    
-    //Method to move around the enemy in order to avoid being blocked while
-    //trying to reach the furthest corner
-    //Copied from my 'TimidinRobot' class
+
+    /**
+     * Method to move around the enemy in order to avoid being blocked while
+     * trying to reach the furthest corner
+     * Copied from my 'TimidinRobot' class
+     * @param distance
+     */
     public void moveAroundEnemy(double distance) 
     {
         //Check the distance from the walls to decide which side to move
@@ -362,9 +379,13 @@ public class FollowTheLeaderBot extends TeamRobot implements Serializable{
         //Move in the chosen direction with a backward/forward distance
         ahead(distance);
     }
-    
-    //Move to a certain coord
-    //Generated with chatGPT
+
+    /**
+     * Move to a certain coord
+     * Generated with chatGPT
+     * @param x
+     * @param y
+     */
     public void goTo(double x, double y) 
     {
         double dx = x - getX();
@@ -379,8 +400,11 @@ public class FollowTheLeaderBot extends TeamRobot implements Serializable{
         //Move towards the target in one smooth motion
         ahead(distance); //Move the entire distance in one go
     }
-    
-    //Handles any robot's death (ally and enemy)
+
+    /**
+     * Handles any robot's death (ally and enemy)
+     * @param event
+     */
     @Override
     public void onRobotDeath(RobotDeathEvent event) 
     {
@@ -436,17 +460,25 @@ public class FollowTheLeaderBot extends TeamRobot implements Serializable{
         }
     }
 
-    //Normalize angle
-    //Generated with ChatGPT
+    /**
+     * Normalize angle
+     * Generated with ChatGPT
+     * @param angle
+     * @return normalized angle
+     */
     public double normalizeBearing(double angle) 
     {
         while (angle > 180) angle -= 360;
         while (angle < -180) angle += 360;
         return angle;
     }
-    
-    //Basic function to aim and shoot at the enemy target decided by the leader
-    //Generated with ChatGPT
+
+    /**
+     * Basic function to aim and shoot at the enemy target decided by the leader
+     * Generated with ChatGPT
+     * @param enemyX
+     * @param enemyY
+     */
     public void aimAndShoot(double enemyX, double enemyY) 
     {
         //Calculate the difference in X and Y coordinates
@@ -469,7 +501,10 @@ public class FollowTheLeaderBot extends TeamRobot implements Serializable{
         fire(firePower);  //You can change the firepower depending on strategy
     }
 
-    //Roles are assigned to every teammate based on it's initial distance to the leader
+    /**
+     * Roles are assigned to every teammate based on it's initial distance to the leader
+     * @param distances
+     */
     public void assignRolesBasedOnDistance(List<Double> distances) 
     {
         out.println("----ASSIGNING ROLES BASED ON DISTANCE----");
@@ -546,8 +581,11 @@ public class FollowTheLeaderBot extends TeamRobot implements Serializable{
         //out.println("----RECEIVED ROBOT " + teammateName + " COORDS: (" + status.getX() + "," + status.getY() + ")----");
         return status;
     }
-
-    //Handles every possible message receivied
+    
+    /**
+     * Handles every possible message receivied
+     * @param event
+     */
     @Override
     public void onMessageReceived(MessageEvent event) 
     {
@@ -627,8 +665,11 @@ public class FollowTheLeaderBot extends TeamRobot implements Serializable{
             }
         }
     }
-    
-    //Paints a radius to enlight only the leader
+
+    /**
+     * Paints a radius to enlight only the leader
+     * @param g
+     */
     @Override
     public void onPaint(Graphics2D g)
     {   
@@ -640,6 +681,9 @@ public class FollowTheLeaderBot extends TeamRobot implements Serializable{
         }
     }
     
+    /**
+     * Class to save and share a robot's status
+     */
     public class MyRobotStatus implements Serializable
     {
         private double x, y;

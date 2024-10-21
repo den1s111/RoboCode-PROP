@@ -4,7 +4,6 @@ import java.awt.geom.Point2D;
 import java.awt.Color;
 import java.awt.Graphics2D;
 /**
- *
  * @author Denis Vera Iriyari
  */
 public class TimidinRobot extends AdvancedRobot{
@@ -15,7 +14,10 @@ public class TimidinRobot extends AdvancedRobot{
     private double targetDirection;
     private double furthestX, furthestY;
     
-    
+    /**
+     * Handles the main rules of the robot changing between states
+     * when needed according to the exercise requirements
+     */
     @Override
     public void run()
     {
@@ -50,6 +52,11 @@ public class TimidinRobot extends AdvancedRobot{
         turnRadarRight(360);
     }
     
+    /**
+     * Handles what to do in case it scans a robot, depending on the state
+     * it will either move to it's furthest corner or aim and shoot at it
+     * @param event
+     */
     @Override
     public void onScannedRobot(ScannedRobotEvent event)
     {
@@ -141,8 +148,11 @@ public class TimidinRobot extends AdvancedRobot{
         return Math.toDegrees(Math.atan2(tempX, tempY));
     }
     
-    //When hit by a robot, we aim at him and shoot, after that, we redesign the pathing
-    //to the furthest corner by moving back and around the enemy
+    /**
+     * When hit by a robot, we aim at him and shoot, after that, we redesign the pathing
+     * to the furthest corner by moving back and around the enemy
+     * @param event
+     */
     @Override
     public void onHitRobot(HitRobotEvent event)
     {
@@ -162,8 +172,11 @@ public class TimidinRobot extends AdvancedRobot{
         moveToCorner();
     }
     
-    //Method to move around the enemy in order to avoid being blocked while
-    //trying to reach the furthest corner
+    /**
+     * Method to move around the enemy in order to avoid being blocked while
+     * trying to reach the furthest corner
+     * @param distance
+     */
     public void moveAroundEnemy(double distance) {
         //Check the distance from the walls to decide which side to move
         double battlefieldWidth = getBattleFieldWidth();
@@ -192,6 +205,10 @@ public class TimidinRobot extends AdvancedRobot{
         ahead(distance);
     }
     
+    /**
+     * Sets a colored radius for the robot
+     * @param g
+     */
     @Override
     public void onPaint(Graphics2D g)
     {
@@ -199,8 +216,12 @@ public class TimidinRobot extends AdvancedRobot{
         g.setColor(Color.green);
         g.drawOval((int) getX()-r, (int)getY()-r, 2*r, 2*r);
     }
-    
-    //Helper function to normalize the angle between -180 and 180 degrees
+
+    /**
+     * Helper function to normalize the angle between -180 and 180 degrees
+     * @param angle
+     * @return normalized angle
+     */
     public double normalizeBearing(double angle) {
         while (angle > 180) 
         {
